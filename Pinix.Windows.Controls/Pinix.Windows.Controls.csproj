@@ -49,9 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\TreeViewItemBehavior.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\AbstractConverter.cs" />
     <Compile Include="Converters\DoublePrecisionConverter.cs" />
+    <Compile Include="Converters\HexColorConverter.cs" />
     <Compile Include="Converters\MethodConverter.cs" />
+    <Compile Include="Converters\RgbaConverter.cs" />
     <Compile Include="Converters\TreeViewLineConverter.cs" />
     <Compile Include="PrettifyJsonViewer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

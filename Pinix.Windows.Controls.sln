@@ -1,11 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinix.Windows.Controls", "Pinix.Windows.Controls\Pinix.Windows.Controls.csproj", "{50551D06-8C74-46CB-B2DB-02FFFB50AB2A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{FD79DCBE-69D6-4646-B1A3-B48089DA2F9C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9844F8EE-F302-4D87-ADFD-958C2C5B4C48}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reports", "Reports", "{3868AB12-F41D-49B8-849F-F3A4FB0A8C78}"
+	ProjectSection(SolutionItems) = preProject
+		With_TreeView_Virtualization.diagsession = With_TreeView_Virtualization.diagsession
+		Without_TreeView_Virtualization.diagsession = Without_TreeView_Virtualization.diagsession
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +32,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3868AB12-F41D-49B8-849F-F3A4FB0A8C78} = {9844F8EE-F302-4D87-ADFD-958C2C5B4C48}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1680B125-F208-4C83-A838-BAE061166CB1}
 	EndGlobalSection
 EndGlobal

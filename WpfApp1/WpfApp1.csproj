@@ -61,7 +61,9 @@
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Data\UserSource.cs" />
+    <Compile Include="Servcies\IIoService.cs" />
     <Compile Include="Model\ColorInfo.cs" />
+    <Compile Include="Servcies\Win32IoService.cs" />
     <Compile Include="ViewModel\AbstractViewModel.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="ViewModel\MainVm.cs" />
@@ -103,6 +105,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="random.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

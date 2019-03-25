@@ -168,18 +168,18 @@
                         <Trigger Property="HasItems" Value="false">
                             <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
                         </Trigger>
-                        <Trigger Property="IsSelected" Value="true">
+                        <!--<Trigger Property="IsSelected" Value="true">
                             <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                        </Trigger>
-                        <MultiTrigger>
+                        </Trigger>-->
+                        <!--<MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsSelected" Value="true"/>
                                 <Condition Property="IsSelectionActive" Value="false"/>
                             </MultiTrigger.Conditions>
                             <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
-                        </MultiTrigger>
+                        </MultiTrigger>-->
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                         </Trigger>
@@ -265,6 +265,20 @@
                 Value="{Binding ShowIcons, RelativeSource={RelativeSource AncestorType={x:Type ctrl:PrettifyJsonViewer}}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Style>
 
+    <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="{x:Type ctrl:PrettifyJsonViewer}">
         <Style.Resources>
             <HierarchicalDataTemplate DataType="{x:Type jlinq:JArray}"
@@ -309,8 +323,36 @@
                     <TextBlock Text="{Binding Name, Mode=OneWay}" FontWeight="{Binding PropertyFontWeight, RelativeSource={RelativeSource AncestorType={x:Type ctrl:PrettifyJsonViewer}}}"
                                Foreground="{Binding PropertyBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ctrl:PrettifyJsonViewer}}}" />
                     <TextBlock Text=" : " />
-                    <TextBlock DataContext="{Binding Value, Mode=OneWay}"
+                    <TextBlock DataContext="{Binding Value, Mode=OneWay}" MinWidth="10" MaxWidth="450"
+                               TextWrapping="Wrap"
                                Style="{StaticResource TextBlock.TokenTypeForegroundConverter}" />
+                    <Button Style="{StaticResource ButtonStyle}" Background="{Binding Value, Mode=OneWay, Converter={conv:HexColorConverter}}"
+                            BorderBrush="Black" BorderThickness="1"
+                            Visibility="{Binding Value, Mode=OneWay, Converter={conv:IsHexColorConverter}}"
+                            Width="{Binding FontSize, RelativeSource={RelativeSource AncestorType={x:Type ctrl:PrettifyJsonViewer}}}" 
+                            Height="{Binding FontSize, RelativeSource={RelativeSource AncestorType={x:Type ctrl:PrettifyJsonViewer}}}" 
+                            Margin="5,1"
+                            Command="{Binding CopyRgbaToClipboardCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ctrl:PrettifyJsonViewer}}}"
+                            CommandParameter="{Binding Value, Mode=OneWay}">
+                        <Button.ToolTip>
+                            <ToolTip Foreground="Black">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Background="{Binding Value, Mode=OneWay, Converter={conv:HexColorConverter}}"
+                                            BorderBrush="Black" BorderThickness="1"
+                                            Width="16" 
+                                            Height="16" 
+                                            Margin="5,1"/>
+                                        <TextBlock Text="{Binding Value, Mode=OneWay}" Margin="5,1"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="RGBA" Margin="5,1" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Value, Mode=OneWay, Converter={conv:RgbaConverter}, StringFormat='{}({0})'}" Margin="1"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
                 </StackPanel>
             </HierarchicalDataTemplate>
             <HierarchicalDataTemplate DataType="{x:Type jlinq:JObject}" 
@@ -330,7 +372,7 @@
                                                  ValueTemplate="{StaticResource ValueDataTemplate}"
                                                  ArrayTemplate="{StaticResource ArrayDataTemplate}"/>
         </Style.Resources>
-        
+
         <Setter Property="Margin" Value="5" />
         <Setter Property="MinHeight" Value="48" />
         <Setter Property="MinWidth" Value="150" />
@@ -345,9 +387,12 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <TreeView x:Name="PART_RootTree"
                                   ItemTemplateSelector="{StaticResource JsonTemplateSelector}"
-                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  VirtualizingStackPanel.VirtualizationMode="Recycling">
                             <TreeView.ItemContainerStyle>
                                 <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                    
                                     <Setter Property="IsExpanded"
                                             Value="{Binding IsExpanded, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ctrl:PrettifyJsonViewer}}}" />
                                 </Style>

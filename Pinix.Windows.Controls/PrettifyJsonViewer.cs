@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -179,16 +180,17 @@ namespace Pinix.Windows.Controls
             _partRootTree?.Items.Add(JsonContent);
         }
 
+        public ICommand CopyRgbaToClipboardCommand => new Commands.RelayCommand<object>(p => Clipboard.SetText(p.ToString()));
+
         private void PrepareJsonData(object value)
         {
-            //var obj = await Task.Run(() =>
-            //{
-            //if (value == null) return;
-                //var jObject = JObject.FromObject(value, new JsonSerializer { Formatting = Formatting.Indented });
-            var jObject =  JsonConvert.SerializeObject(value, Formatting.Indented);
-            //});
-
-            JsonContent = JToken.Parse(jObject);
+            if (value == null || value.GetType() != typeof(string))
+            {
+                var jObject = JsonConvert.SerializeObject(value, Formatting.Indented);
+                JsonContent = JToken.Parse(jObject);
+            }
+            else
+                JsonContent = JToken.Parse((string)value);
 
             _partRootTree?.Items.Clear();
             _partRootTree?.Items.Add(JsonContent);

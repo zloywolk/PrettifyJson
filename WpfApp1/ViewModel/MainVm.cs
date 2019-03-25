@@ -5,38 +5,22 @@ using System.Windows.Media;
 using WpfApp1.Commands;
 using WpfApp1.Data;
 using WpfApp1.Model;
+using Newtonsoft.Json;
+
+using System.IO;
+using WpfApp1.Servcies;
 
 namespace WpfApp1.ViewModel
 {
     class MainVm : AbstractViewModel
     {
-        private User _user;
-
-        public User User
+        public object JsonData
         {
-            get { return _user; }
+            get => _jsonData;
             set
             {
-                if (value != _user)
-                {
-                    _user = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private ObservableCollection<User> _users;
-
-        public ObservableCollection<User> Users
-        {
-            get { return _users; }
-            set
-            {
-                if (value != _users)
-                {
-                    _users = value;
-                    OnPropertyChanged();
-                }
+                _jsonData = value;
+                OnPropertyChanged();
             }
         }
 
@@ -44,12 +28,19 @@ namespace WpfApp1.ViewModel
 
         public ICommand AddUserCommand => _addUserCommand = _addUserCommand ?? new RelayCommand(() =>
         {
-            var users = Users;
-            users.Add(UserSource.GetUser());
-            Users = new ObservableCollection<User>(users);
+            try
+            { 
+                JsonData = _ioService.Read();
+            }
+            catch (System.Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
         });
 
         private ObservableCollection<ColorInfo> _brushes;
+        private object _jsonData;
+        private IIoService _ioService;
 
         public ObservableCollection<ColorInfo> Brushes
         {
@@ -66,12 +57,11 @@ namespace WpfApp1.ViewModel
 
         public MainVm()
         {
-            User = Data.UserSource.GetUser();
-            Users = new ObservableCollection<User>();
+            _ioService = new Win32IoService();
             Brushes = new ObservableCollection<ColorInfo>();
-            foreach (var pi in typeof (System.Windows.Media.Brushes).GetProperties())
+            foreach (var pi in typeof(System.Windows.Media.Brushes).GetProperties())
             {
-                var value = (SolidColorBrush) pi.GetValue(null);
+                var value = (SolidColorBrush)pi.GetValue(null);
                 if (value != null)
                 {
                     Brushes.Add(new ColorInfo
